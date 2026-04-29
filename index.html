@@ -24,24 +24,24 @@
             <!-- Hero Section -->
             <section class="hero">
                 <h1>Your Music, Your Way</h1>
-                <input type="text" class="search-box" placeholder="Search songs, artists...">
+                <input type="text" class="search-box" placeholder="Search songs, artists..." id="searchBox">
             </section>
 
             <!-- Categories -->
             <section class="categories">
                 <h2>Categories</h2>
                 <div class="category-grid">
-                    <div class="category-card">Pop</div>
-                    <div class="category-card">Rock</div>
-                    <div class="category-card">Hip-Hop</div>
-                    <div class="category-card">Jazz</div>
+                    <div class="category-card" onclick="filterCategory('Pop')">Pop</div>
+                    <div class="category-card" onclick="filterCategory('Rock')">Rock</div>
+                    <div class="category-card" onclick="filterCategory('Hip-Hop')">Hip-Hop</div>
+                    <div class="category-card" onclick="filterCategory('Jazz')">Jazz</div>
                 </div>
             </section>
 
             <!-- Trending Songs -->
             <section id="trending" class="songs-section">
                 <h2>Trending Now</h2>
-                <div class="songs-grid">
+                <div class="songs-grid" id="songsGrid">
                     <div class="song-card" onclick="playSong('Blinding Lights', 'The Weeknd')">
                         <div class="song-img">🎵</div>
                         <h3>Blinding Lights</h3>
@@ -62,6 +62,16 @@
                         <h3>Anti-Hero</h3>
                         <p>Taylor Swift</p>
                     </div>
+                    <div class="song-card" onclick="playSong('As It Was', 'Harry Styles')">
+                        <div class="song-img">🎵</div>
+                        <h3>As It Was</h3>
+                        <p>Harry Styles</p>
+                    </div>
+                    <div class="song-card" onclick="playSong('Essence', 'Wizkid ft. Tems')">
+                        <div class="song-img">🎵</div>
+                        <h3>Essence</h3>
+                        <p>Wizkid ft. Tems</p>
+                    </div>
                 </div>
             </section>
 
@@ -69,20 +79,25 @@
             <section id="playlists" class="playlists-section">
                 <h2>Popular Playlists</h2>
                 <div class="playlist-grid">
-                    <div class="playlist-card">
+                    <div class="playlist-card" onclick="openPlaylist('Chill Vibes')">
                         <div class="playlist-img">🎧</div>
                         <h3>Chill Vibes</h3>
                         <p>32 songs</p>
                     </div>
-                    <div class="playlist-card">
+                    <div class="playlist-card" onclick="openPlaylist('Workout Mix')">
                         <div class="playlist-img">🎧</div>
                         <h3>Workout Mix</h3>
                         <p>45 songs</p>
                     </div>
-                    <div class="playlist-card">
+                    <div class="playlist-card" onclick="openPlaylist('Party Time')">
                         <div class="playlist-img">🎧</div>
                         <h3>Party Time</h3>
                         <p>50 songs</p>
+                    </div>
+                    <div class="playlist-card" onclick="openPlaylist('Sleep Sounds')">
+                        <div class="playlist-img">🎧</div>
+                        <h3>Sleep Sounds</h3>
+                        <p>28 songs</p>
                     </div>
                 </div>
             </section>
@@ -91,24 +106,28 @@
             <section id="videos" class="videos-section">
                 <h2>Music Videos</h2>
                 <div class="video-grid">
-                    <div class="video-card">
+                    <div class="video-card" onclick="playVideo('Blinding Lights MV')">
                         <div class="video-thumb">🎬</div>
                         <h3>Blinding Lights MV</h3>
                     </div>
-                    <div class="video-card">
+                    <div class="video-card" onclick="playVideo('Shape of You MV')">
                         <div class="video-thumb">🎬</div>
                         <h3>Shape of You MV</h3>
                     </div>
-                    <div class="video-card">
+                    <div class="video-card" onclick="playVideo('Levitating MV')">
                         <div class="video-thumb">🎬</div>
                         <h3>Levitating MV</h3>
+                    </div>
+                    <div class="video-card" onclick="playVideo('Anti-Hero MV')">
+                        <div class="video-thumb">🎬</div>
+                        <h3>Anti-Hero MV</h3>
                     </div>
                 </div>
             </section>
         </main>
 
         <!-- Mini Music Player -->
-        <div class="mini-player">
+        <div class="mini-player" onclick="openFullPlayer()">
             <div class="mini-player-info">
                 <div class="mini-song-img">🎵</div>
                 <div class="mini-song-details">
@@ -116,28 +135,34 @@
                     <p class="mini-artist-name" id="miniArtistName">Select a song</p>
                 </div>
             </div>
-            <div class="mini-controls">
-                <button onclick="togglePlay()" class="mini-btn">▶</button>
+            <div class="mini-controls" onclick="event.stopPropagation()">
+                <button onclick="togglePlay()" class="mini-btn" id="miniPlayBtn">▶</button>
                 <button onclick="nextSong()" class="mini-btn">⏭</button>
                 <input type="range" class="mini-volume" min="0" max="100" value="70" onchange="changeVolume(this.value)">
             </div>
         </div>
 
-        <!-- Full Player (Hidden) -->
+        <!-- Full Player Modal -->
         <div class="player-modal" id="playerModal">
             <div class="player-content">
                 <button class="close-btn" onclick="closePlayer()">✕</button>
                 <div class="player-img">🎵</div>
                 <h2 id="playerSongName">No song</h2>
                 <p id="playerArtistName">Artist</p>
+                <div class="progress-bar">
+                    <span id="currentTime">0:00</span>
+                    <input type="range" class="progress" min="0" max="100" value="0" onchange="seek(this.value)">
+                    <span id="duration">3:00</span>
+                </div>
                 <div class="player-controls">
-                    <button onclick="previousSong()">⏮</button>
-                    <button onclick="togglePlay()" class="play-btn">▶</button>
-                    <button onclick="nextSong()">⏭</button>
+                    <button onclick="previousSong()" class="control-btn">⏮</button>
+                    <button onclick="togglePlay()" class="play-btn" id="playBtn">▶</button>
+                    <button onclick="nextSong()" class="control-btn">⏭</button>
                 </div>
                 <div class="player-extras">
-                    <button onclick="toggleRepeat()">🔁</button>
+                    <button onclick="toggleRepeat()" class="repeat-btn" id="repeatBtn">🔁</button>
                     <input type="range" class="volume-slider" min="0" max="100" value="70" onchange="changeVolume(this.value)">
+                    <span id="volumeValue">70%</span>
                 </div>
             </div>
         </div>
